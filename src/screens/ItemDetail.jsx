@@ -1,41 +1,62 @@
 import React, { useEffect, useState } from "react";
 import {
-  Button,
+  Pressable,
   Image,
   StyleSheet,
   Text,
   View,
-  useWindowDimensions,
+  Dimensions,
 } from "react-native";
-import allProducts from "../data/products.json";
+import { useGetProductByIdQuery } from "../services/shopServices";
+import { ActivityIndicator } from "react-native";
+import { colors } from "../global/colors";
+import { useDispatch } from "react-redux";
+import { addCartItem } from "../fetures/cart/CartSlice";
 
 const ItemDetail = ({ route, navigation }) => {
-  const { productId: idSelected } = route.params;
-  const { width, height } = useWindowDimensions();
-  const [orientation, setOrientation] = useState("portrait");
-  const [product, setProduct] = useState(null);
-
+  const { productId: idSelected } = route?.params || {};
+  const [loading, setLoading] = useState(true);
+  const {
+    data: product,
+    error,
+    isLoading,
+  } = useGetProductByIdQuery(idSelected);
+  const dispatch = useDispatch();
   useEffect(() => {
-    if (width > height) setOrientation("landscape");
-    else setOrientation("portrait");
-  }, [width, height]);
+    if (isLoading) {
+      setTimeout(() => {
+        setLoading(false);
+      }, 6000);
+    } else {
+      setLoading(false);
+    }
+  }, [isLoading]);
 
-  useEffect(() => {
-    const productSelected = allProducts.find(
-      (product) => product.id === idSelected
-    );
-    setProduct(productSelected);
-  }, [idSelected]);
+  const handleAddCart = () => {
+    dispatch(addCartItem);
+    dispatch(addCartItem({ ...product, quantity: 1 }));
+  };
 
-  console.log(product);
+  const orientation =
+    Dimensions.get("window").width > Dimensions.get("window").height
+      ? "landscape"
+      : "portrait";
 
   return (
     <View style={styles.container}>
-      <Button
+      {loading && (
+        <ActivityIndicator
+          size="large"
+          color="black"
+        />
+      )}
+      <Pressable
         onPress={() => navigation.goBack()}
-        title="Back"
-      />
-      {product ? (
+        style={styles.button}
+      >
+        <Text style={styles.buttonText}>Back</Text>
+      </Pressable>
+      {product && (
         <View
           style={
             orientation === "portrait"
@@ -60,10 +81,13 @@ const ItemDetail = ({ route, navigation }) => {
             <Text style={styles.title}>{product.title}</Text>
             <Text style={styles.description}>{product.description}</Text>
             <Text style={styles.price}>${product.price}</Text>
-            <Button title="Add to Cart" />
+            <Button
+              title="Add to Cart"
+              onPress={handleAddCart}
+            />
           </View>
         </View>
-      ) : null}
+      )}
     </View>
   );
 };
@@ -110,6 +134,15 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "flex-start",
     gap: 10,
+  },
+  button: {
+    padding: 10,
+    backgroundColor: colors.blueGreen,
+    borderRadius: 5,
+  },
+  buttonText: {
+    color: "white",
+    textAlign: "center",
   },
   title: {
     fontSize: 20,

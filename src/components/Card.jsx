@@ -9,16 +9,10 @@ export default Card;
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: colors.blueGreen,
-    shadowColor: colors.babyBlue,
+    backgroundColor: colors.blueGrotto,
+    boxShadow: `4px 4px 4.65px 0.3 ${colors.babyBlue}`,
     width: 330,
     height: 40,
-    shadowOffset: {
-      width: 4,
-      height: 4,
-    },
-    shadowOpacity: 0.3,
-    shadowRadius: 4.65,
     elevation: 4,
     marginRight: 10,
     justifyContent: "center",

@@ -3,14 +3,22 @@ import React from "react";
 import Card from "./Card";
 import { colors } from "../global/colors";
 
+import { useDispatch } from "react-redux";
+import { setItemSelected } from "../fetures/shop/ShopSlice";
+
 const ProductItem = ({ product, navigation }) => {
+  const dispatch = useDispatch();
+
+  const handleNavigate = () => {
+    dispatch(setItemSelected(product.title));
+    navigation.navigate("ItemDetail", { productoId: product.id });
+  };
+
   return (
     <Card style={styles.additionalStylesCard}>
       <Pressable
         style={styles.pressable}
-        onPress={() =>
-          navigation.navigate("ItemDetail", { productId: product.id })
-        }
+        onPress={handleNavigate}
       >
         <Text style={styles.textCategory}>{product.title}</Text>
         <Image
@@ -27,27 +35,26 @@ export default ProductItem;
 
 const styles = StyleSheet.create({
   image: {
-    height: 120,
-    width: "30%",
+    height: 100,
+    width: 100,
     borderRadius: 8,
   },
   additionalStylesCard: {
-    height: 120,
-    width: 300,
+    height: 140,
+    width: 320,
     margin: 10,
-    paddingLeft: 10,
+    borderRadius: 10,
+    padding: 10,
+    backgroundColor: colors.navyBlue,
     justifyContent: "space-between",
-    flexDirection: "row",
   },
   textCategory: {
-    color: colors.green900,
-    width: "70%",
+    color: colors.babyBlue,
+    flex: 1,
+    marginRight: 10,
   },
   pressable: {
-    width: "100%",
     flexDirection: "row",
-    justifyContent: "space-between",
     alignItems: "center",
-    paddingLeft: 10,
   },
 });

@@ -50,13 +50,14 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     gap: 18,
+    paddingBottom: 5,
   },
   input: {
     width: 250,
     padding: 8,
     fontSize: 18,
     backgroundColor: colors.blueGreen,
-    color: colors.gray100,
+    color: "white",
     borderRadius: 10,
   },
 });
