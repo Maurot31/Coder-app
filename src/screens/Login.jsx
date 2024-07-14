@@ -77,14 +77,13 @@ const styles = StyleSheet.create({
     flexDirection: "column",
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: colors.gray100,
+
     gap: 15,
     paddingVertical: 20,
     borderRadius: 10,
   },
   title: {
     fontSize: 22,
-    fontFamily: "Josefin",
   },
   sub: {
     fontSize: 14,
