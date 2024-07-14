@@ -1,7 +1,6 @@
-import { Image, StyleSheet, Text, View, Pressable } from "react-native";
+import { Image, StyleSheet, Text, View } from "react-native";
 import React, { useState } from "react";
-import { colors } from "../global/colors";
-import CustomButton from "../components/CustomButton"; // Importa tu CustomButton
+import CustomButton from "../components/CustomButton";
 import * as ImagePicker from "expo-image-picker";
 import { setCameraImage } from "../fetures/user/UserSlice";
 import { useDispatch, useSelector } from "react-redux";
