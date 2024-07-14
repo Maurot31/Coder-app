@@ -7,6 +7,7 @@ import { setCategorySelected } from "../fetures/shop/ShopSlice";
 
 const CategoryItem = ({ category, navigation }) => {
   const dispatch = useDispatch();
+
   const handleNavigate = () => {
     dispatch(setCategorySelected(category));
     navigation.navigate("ItemListCategory", { category });
@@ -32,11 +33,18 @@ const styles = StyleSheet.create({
     padding: 15,
     justifyContent: "center",
     alignItems: "center",
-    boxShadow: "0px 2px 5px rgba(0, 0, 0, 0.5)",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.5,
+    shadowRadius: 3.84,
     elevation: 5,
   },
   text: {
     fontSize: 20,
     color: colors.white,
+    fontFamily: "Cascadia Code",
   },
 });

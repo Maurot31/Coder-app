@@ -2,9 +2,9 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { baseUrl } from "../databases/realtimeDataBase";
 
 export const shopApi = createApi({
-  baseQuery: fetchBaseQuery({
-    baseUrl: baseUrl,
-  }),
+  reducerPath: "shopApi",
+  baseQuery: fetchBaseQuery({ baseUrl: baseUrl }),
+  tagTypes: ["profileImageGet"],
   endpoints: (builder) => ({
     getCategories: builder.query({
       query: () => `categories.json`,
@@ -18,12 +18,10 @@ export const shopApi = createApi({
       },
     }),
     getProductById: builder.query({
-      query: (productId) => `product.json?orderBy="id"&equalTo="${productId}"`,
+      query: (productId) => `products.json?orderBy="id"&equalTo=${productId}`,
       transformResponse: (res) => {
         const transformedResponse = Object.values(res);
-        if (transformedResponse.length) {
-          return transformedResponse[0];
-        }
+        if (transformedResponse.length) return transformedResponse[0];
       },
     }),
     postOrder: builder.mutation({
@@ -33,6 +31,37 @@ export const shopApi = createApi({
         body: order,
       }),
     }),
+    getProfileimage: builder.query({
+      query: (localId) => `profileImages/${localId}.json`,
+      providesTags: ["profileImageGet"],
+    }),
+    postProfileImage: builder.mutation({
+      query: ({ image, localId }) => ({
+        url: `profileImages/${localId}.json`,
+        method: "PUT",
+        body: {
+          image: image,
+        },
+      }),
+      invalidatesTags: ["profileImageGet"],
+    }),
+    getLocation: builder.query({
+      query: (localId) => `locations/${localId}.json`,
+      providesTags: ["locationGet"],
+    }),
+    postLocation: builder.mutation({
+      query: ({ location, localId }) => ({
+        url: `locations/${localId}.json`,
+        method: "PUT",
+        body: {
+          latitude: location.latitude,
+          longitude: location.longitude,
+          address: location.address,
+          updatedAt: location.updatedAt,
+        },
+      }),
+      invalidatesTags: ["locationGet"],
+    }),
   }),
 });
 
@@ -41,4 +70,8 @@ export const {
   useGetProductsByCategoryQuery,
   useGetProductByIdQuery,
   usePostOrderMutation,
+  useGetProfileimageQuery,
+  usePostProfileImageMutation,
+  useGetLocationQuery,
+  usePostLocationMutation,
 } = shopApi;

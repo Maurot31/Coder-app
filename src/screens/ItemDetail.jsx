@@ -1,62 +1,46 @@
 import React, { useEffect, useState } from "react";
 import {
-  Pressable,
   Image,
   StyleSheet,
   Text,
   View,
-  Dimensions,
+  useWindowDimensions,
 } from "react-native";
 import { useGetProductByIdQuery } from "../services/shopServices";
-import { ActivityIndicator } from "react-native";
-import { colors } from "../global/colors";
 import { useDispatch } from "react-redux";
 import { addCartItem } from "../fetures/cart/CartSlice";
+import CustomButton from "../components/CustomButton";
+import { colors } from "../global/colors";
 
 const ItemDetail = ({ route, navigation }) => {
-  const { productId: idSelected } = route?.params || {};
-  const [loading, setLoading] = useState(true);
+  const { width, height } = useWindowDimensions();
+  const [orientation, setOrientation] = useState("portrait");
+  const { productoId: idSelected } = route.params;
+  const dispatch = useDispatch();
   const {
     data: product,
     error,
     isLoading,
   } = useGetProductByIdQuery(idSelected);
-  const dispatch = useDispatch();
+
   useEffect(() => {
-    if (isLoading) {
-      setTimeout(() => {
-        setLoading(false);
-      }, 6000);
-    } else {
-      setLoading(false);
-    }
-  }, [isLoading]);
+    if (width > height) setOrientation("landscape");
+    else setOrientation("portrait");
+  }, [width, height]);
 
   const handleAddCart = () => {
-    dispatch(addCartItem);
     dispatch(addCartItem({ ...product, quantity: 1 }));
   };
 
-  const orientation =
-    Dimensions.get("window").width > Dimensions.get("window").height
-      ? "landscape"
-      : "portrait";
-
   return (
     <View style={styles.container}>
-      {loading && (
-        <ActivityIndicator
-          size="large"
-          color="black"
-        />
-      )}
-      <Pressable
+      <CustomButton
         onPress={() => navigation.goBack()}
-        style={styles.button}
-      >
-        <Text style={styles.buttonText}>Back</Text>
-      </Pressable>
-      {product && (
+        title="Back"
+        color={colors.navyBlue}
+        textColor={colors.babyBlue}
+      />
+      {product ? (
         <View
           style={
             orientation === "portrait"
@@ -81,13 +65,15 @@ const ItemDetail = ({ route, navigation }) => {
             <Text style={styles.title}>{product.title}</Text>
             <Text style={styles.description}>{product.description}</Text>
             <Text style={styles.price}>${product.price}</Text>
-            <Button
+            <CustomButton
               title="Add to Cart"
               onPress={handleAddCart}
+              color={colors.blueGrotto}
+              textColor={colors.babyBlue}
             />
           </View>
         </View>
-      )}
+      ) : null}
     </View>
   );
 };
@@ -95,22 +81,20 @@ const ItemDetail = ({ route, navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
     padding: 10,
+    justifyContent: "center",
+    alignItems: "center",
   },
   mainContainer: {
-    marginTop: 30,
-    width: "90%",
     flexDirection: "column",
     justifyContent: "center",
-    alignItems: "center",
+    alignItems: "flex-start",
     padding: 10,
   },
   mainContainerLandscape: {
     flexDirection: "row",
     justifyContent: "center",
-    alignItems: "center",
+    alignItems: "flex-start",
     padding: 10,
     gap: 10,
   },
@@ -118,45 +102,42 @@ const styles = StyleSheet.create({
     width: "100%",
     height: 250,
     borderRadius: 10,
+    marginBottom: 10,
   },
   imageLandscape: {
     width: "45%",
     height: 200,
     borderRadius: 10,
+    marginBottom: 10,
   },
   textContainer: {
     flexDirection: "column",
     alignItems: "center",
+    justifyContent: "center",
   },
   textContainerLandscape: {
     width: "50%",
     flexDirection: "column",
     justifyContent: "center",
-    alignItems: "flex-start",
+    alignItems: "start",
     gap: 10,
   },
-  button: {
-    padding: 10,
-    backgroundColor: colors.blueGreen,
-    borderRadius: 5,
-  },
-  buttonText: {
-    color: "white",
-    textAlign: "center",
-  },
   title: {
-    fontSize: 20,
-    fontWeight: "bold",
+    fontSize: 24,
+    fontFamily: "CascadiaCode",
+    color: colors.navyBlue,
     marginBottom: 5,
   },
   description: {
-    marginBottom: 10,
+    fontSize: 16,
+    color: colors.navyBlue,
+    marginBottom: 5,
   },
   price: {
     textAlign: "right",
     fontSize: 18,
+    color: colors.navyBlue,
     fontWeight: "bold",
-    color: "green",
   },
 });
 

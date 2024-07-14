@@ -1,6 +1,4 @@
 import { StyleSheet, Text, View, FlatList, Pressable } from "react-native";
-
-//import CartData from '../data/cart.json'
 import CartItem from "../components/CartItem";
 import { useSelector } from "react-redux";
 import { usePostOrderMutation } from "../services/shopServices";

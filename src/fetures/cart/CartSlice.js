@@ -50,6 +50,46 @@ export const cartSlice = createSlice({
       }
     },
     removeCartItem: (state, { payload }) => {
+      const itemToRemove = state.value.items.find(
+        (item) => item.id === payload.id
+      );
+      if (itemToRemove.quantity > 1) {
+        const updatedItems = state.value.items.map((item) => {
+          if (item.id === payload.id) {
+            return {
+              ...item,
+              quantity: item.quantity - 1,
+            };
+          }
+          return item;
+        });
+        const total = updatedItems.reduce(
+          (acc, currentItem) => acc + currentItem.price * currentItem.quantity,
+          0
+        );
+        state.value = {
+          ...state.value,
+          items: updatedItems,
+          total,
+          updatedAt: new Date().toLocaleString(),
+        };
+      } else {
+        const updatedItems = state.value.items.filter(
+          (item) => item.id !== payload.id
+        );
+        const total = updatedItems.reduce(
+          (acc, currentItem) => acc + currentItem.price * currentItem.quantity,
+          0
+        );
+        state.value = {
+          ...state.value,
+          items: updatedItems,
+          total,
+          updatedAt: new Date().toLocaleString(),
+        };
+      }
+    },
+    removeAllCartItem: (state, { payload }) => {
       const updatedItems = state.value.items.filter(
         (item) => item.id !== payload.id
       );
@@ -67,5 +107,6 @@ export const cartSlice = createSlice({
   },
 });
 
-export const { addCartItem, removeCartItem } = cartSlice.actions;
+export const { addCartItem, removeAllCartItem, removeCartItem } =
+  cartSlice.actions;
 export default cartSlice.reducer;

@@ -21,7 +21,13 @@ const styles = StyleSheet.create({
     alignItems: "center",
     borderBottomLeftRadius: 20,
     borderBottomRightRadius: 20,
-    boxShadow: "0px 2px 3px rgba(0, 0, 0, 0.5)",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.5,
+    shadowRadius: 3,
     elevation: 5,
   },
   text: {
@@ -29,6 +35,6 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     textTransform: "uppercase",
     color: colors.white,
-    fontFamily: "CascadiaCode",
+    fontFamily: "Cascadia Code",
   },
 });

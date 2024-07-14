@@ -38,11 +38,13 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: colors.navyBlue,
     marginBottom: 5,
+    fontFamily: "Cascadia Code",
   },
   error: {
     fontSize: 14,
     color: "red",
     fontStyle: "italic",
+    fontFamily: "Cascadia Code",
   },
   input: {
     width: "90%",
@@ -52,5 +54,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: 12,
     fontSize: 16,
     color: colors.navyBlue,
+    fontFamily: "Cascadia Code",
   },
 });

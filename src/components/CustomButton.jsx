@@ -1,33 +1,37 @@
-/* import { Pressable, StyleSheet, Text } from "react-native";
+import { Pressable, StyleSheet, Text } from "react-native";
 import React from "react";
 import { colors } from "../global/colors";
 
-const SubmitButton = ({ onPress, title }) => {
+const CustomButton = ({
+  title,
+  onPress,
+  color = colors.blueGrotto,
+  textColor = colors.babyBlue,
+}) => {
   return (
     <Pressable
+      style={{ ...styles.button, backgroundColor: color }}
       onPress={onPress}
-      style={styles.button}
     >
-      <Text style={styles.text}>{title}</Text>
+      <Text style={[styles.text, { color: textColor }]}>{title}</Text>
     </Pressable>
   );
 };
 
-export default SubmitButton;
-
 const styles = StyleSheet.create({
   button: {
+    marginTop: 10,
     borderRadius: 6,
     justifyContent: "center",
     alignItems: "center",
     padding: 12,
     width: "60%",
-    backgroundColor: colors.blueGrotto,
   },
   text: {
+    textAlign: "center",
     fontSize: 22,
-    color: colors.babyBlue,
     fontFamily: "CascadiaCode",
   },
 });
- */
+
+export default CustomButton;

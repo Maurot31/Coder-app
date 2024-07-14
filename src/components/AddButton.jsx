@@ -2,18 +2,18 @@
 import React from "react";
 import { colors } from "../global/colors";
 
-const SubmitButton = ({ onPress, title }) => {
+const AddButton = ({ title = "", onPress = () => {} }) => {
   return (
     <Pressable
-      onPress={onPress}
       style={styles.button}
+      onPress={onPress}
     >
       <Text style={styles.text}>{title}</Text>
     </Pressable>
   );
 };
 
-export default SubmitButton;
+export default AddButton;
 
 const styles = StyleSheet.create({
   button: {
@@ -25,8 +25,9 @@ const styles = StyleSheet.create({
     backgroundColor: colors.blueGrotto,
   },
   text: {
+    textAlign: "center",
     fontSize: 22,
-    color: colors.babyBlue,
+    color: "white",
     fontFamily: "CascadiaCode",
   },
 });

@@ -3,7 +3,8 @@ import React, { useState, useEffect } from "react";
 import { colors } from "../global/colors";
 
 import InputForm from "../components/InputForm";
-import SubmitButton from "../components/SubmitButton";
+/* import SubmitButton from "../components/SubmitButton"; */
+import CustomButton from "../components/CustomButton";
 import { useSignInMutation } from "../services/authService";
 import { useDispatch } from "react-redux";
 import { setUser } from "../fetures/user/UserSlice";
@@ -46,9 +47,11 @@ const Login = ({ navigation }) => {
           error={""}
           isSecure={true}
         />
-        <SubmitButton
+        <CustomButton
           onPress={onSubmit}
           title="Send"
+          color={colors.blueGrotto}
+          textColor={colors.babyBlue}
         />
         <Text style={styles.sub}>Not have an account?</Text>
 

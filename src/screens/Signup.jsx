@@ -1,11 +1,13 @@
 import { Pressable, StyleSheet, Text, View } from "react-native";
 import React, { useState, useEffect } from "react";
 import { colors } from "../global/colors";
-import SubmitButton from "../components/SubmitButton";
+/* import SubmitButton from "../components/SubmitButton"; */
+import CustomButton from "../components/CustomButton";
 import InputForm from "../components/InputForm";
 import { useSignUpMutation } from "../services/authService";
 import { useDispatch } from "react-redux";
 import { setUser } from "../fetures/user/UserSlice";
+import { signupSchema } from "../validations/singUpScheme";
 
 const Signup = ({ navigation }) => {
   const [email, setEmail] = useState("");
@@ -30,7 +32,35 @@ const Signup = ({ navigation }) => {
   }, [result]);
 
   const onSubmit = () => {
-    triggerSignUp({ email, password, returnSecureToken: true });
+    try {
+      setErrorMail("");
+      setErrorPassword("");
+      setErrorConfirmPassword("");
+      const values = { email, password, confirmPassword };
+      signupSchema.validateSync(values, { abortEarly: false });
+
+      triggerSignUp({ email, password, returnSecureToken: true });
+    } catch (error) {
+      console.log("Error en el formulario de registro:");
+      console.log(error.inner);
+
+      error.inner.forEach((err) => {
+        switch (err.path) {
+          case "email":
+            setErrorMail(err.message);
+            break;
+          case "password":
+            setErrorPassword(err.message);
+            break;
+          case "confirmPassword":
+            setErrorConfirmPassword(err.message);
+            break;
+          default:
+            console.log("Error desconocido:", err.message);
+            break;
+        }
+      });
+    }
   };
 
   return (
@@ -54,9 +84,11 @@ const Signup = ({ navigation }) => {
           error={errorConfirmPassword}
           isSecure={true}
         />
-        <SubmitButton
+        <CustomButton
           onPress={onSubmit}
           title="Send"
+          color={colors.blueGrotto}
+          textColor={colors.babyBlue}
         />
         <Text style={styles.sub}>Already have an account?</Text>
         <Pressable onPress={() => navigation.navigate("Login")}>
