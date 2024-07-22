@@ -9,7 +9,12 @@ const Cart = () => {
   const [triggerPostOrder, result] = usePostOrderMutation();
 
   const onConfirmOrder = () => {
-    triggerPostOrder({ items: CartData, user: "Pedrito", total });
+    // logica de confirmacion de orden
+    triggerPostOrder({
+      items: CartData,
+      user: "maurotoledopc@gmail.com",
+      total,
+    });
   };
 
   const totalToShow = CartData.length > 0 ? total : 0;

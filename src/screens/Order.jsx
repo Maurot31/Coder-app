@@ -1,14 +1,21 @@
 import React from "react";
 import { StyleSheet, Text, View, FlatList } from "react-native";
-import OrderData from "../data/orders.json";
 import OrderItem from "../components/OrderItem";
+import { useGetOrdersByUserQuery } from "../services/shopServices";
 
 const Order = () => {
+  const { data: OrderData, isLoading } = useGetOrdersByUserQuery(
+    "maurotoledopc@gmail.com"
+  );
+  //if(!isLoading){
+  console.log(OrderData);
+  //}
+
   return (
-    <View style={styles.container}>
+    <View>
       <FlatList
         data={OrderData}
-        keyExtractor={(orderItem) => orderItem.id.toString()}
+        keyExtractor={(orderItem) => orderItem}
         renderItem={({ item }) => {
           return <OrderItem order={item} />;
         }}

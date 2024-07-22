@@ -10,7 +10,10 @@ const CustomButton = ({
 }) => {
   return (
     <Pressable
-      style={{ ...styles.button, backgroundColor: color }}
+      style={({ pressed }) => [
+        styles.button,
+        { backgroundColor: color, opacity: pressed ? 0.6 : 1 },
+      ]}
       onPress={onPress}
     >
       <Text style={[styles.text, { color: textColor }]}>{title}</Text>

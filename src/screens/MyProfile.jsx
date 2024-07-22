@@ -2,10 +2,12 @@ import { Image, StyleSheet, Text, View, Pressable } from "react-native";
 import React, { useState } from "react";
 import { colors } from "../global/colors";
 import CustomButton from "../components/CustomButton";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useGetProfileimageQuery } from "../services/shopServices";
+import { clearUser } from "../fetures/user/UserSlice";
 
 const MyProfile = ({ navigation }) => {
+  const dispatch = useDispatch();
   const [image, setImage] = useState(null);
   const { imageCamera, localId } = useSelector((state) => state.auth.value);
   const { data: imageFromBase } = useGetProfileimageQuery(localId);
@@ -16,6 +18,10 @@ const MyProfile = ({ navigation }) => {
 
   const launchLocation = async () => {
     navigation.navigate("List Address");
+  };
+
+  const signOut = async () => {
+    dispatch(clearUser());
   };
 
   const defaultImageRoute = "../../assets/user.png";
@@ -46,6 +52,12 @@ const MyProfile = ({ navigation }) => {
       <CustomButton
         onPress={launchLocation}
         title="My Address"
+        color={colors.blueGrotto}
+        textColor={colors.babyBlue}
+      />
+      <CustomButton
+        onPress={signOut}
+        title="Sign Out"
         color={colors.blueGrotto}
         textColor={colors.babyBlue}
       />
