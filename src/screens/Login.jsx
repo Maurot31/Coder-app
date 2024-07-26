@@ -6,6 +6,9 @@ import CustomButton from "../components/CustomButton";
 import { useSignInMutation } from "../services/authService";
 import { useDispatch } from "react-redux";
 import { setUser } from "../fetures/user/UserSlice";
+import { insertSession } from "../persistence";
+import { Platform } from "react-native";
+import { setUser } from "../fetures/user/UserSlice";
 
 const Login = ({ navigation }) => {
   const [email, setEmail] = useState();
@@ -15,14 +18,27 @@ const Login = ({ navigation }) => {
   const [triggerSignIn, result] = useSignInMutation();
 
   useEffect(() => {
-    if (result.isSuccess) {
-      dispatch(
-        setUser({
-          email: result.data.email,
-          idToken: result.data.idToken,
-          localId: result.data.localId,
-        })
-      );
+    if (result?.data && result.isSuccess) {
+      (async () => {
+        try {
+          if (Platform.OS !== "web") {
+            const response = await insertSession({
+              email: result.data.email,
+              localId: result.data.localId,
+              token: result.data.idToken,
+            });
+          }
+          dispatch(
+            setUser({
+              email: result.data.email,
+              idToken: result.data.idToken,
+              localId: result.data.localId,
+            })
+          );
+        } catch (error) {
+          console.log(error);
+        }
+      })();
     }
   }, [result]);
 

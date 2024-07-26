@@ -4,6 +4,17 @@ import { colors } from "./src/global/colors.js";
 import Navigator from "./src/navigation/Navigator.jsx";
 import { Provider } from "react-redux";
 import store from "./src/store/index.js";
+import { initSQLiteDB } from "./src/persistence/index.js";
+
+(async () => {
+  try {
+    if (Platform.OS !== "web") {
+      const response = await initSQLiteDB();
+    }
+  } catch (error) {
+    console.log({ errorCreatingDB: error });
+  }
+})();
 
 export default function App() {
   const [fontsLoaded, fontError] = useFonts({

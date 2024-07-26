@@ -2,19 +2,26 @@ import { StyleSheet, Text, View, FlatList, Pressable } from "react-native";
 import CartItem from "../components/CartItem";
 import { useSelector } from "react-redux";
 import { usePostOrderMutation } from "../services/shopServices";
+import { getSession } from "../persistence";
 
 const Cart = () => {
   const { items: CartData, total } = useSelector((state) => state.cart.value);
 
   const [triggerPostOrder, result] = usePostOrderMutation();
 
-  const onConfirmOrder = () => {
-    // logica de confirmacion de orden
-    triggerPostOrder({
-      items: CartData,
-      user: "maurotoledopc@gmail.com",
-      total,
-    });
+  const onConfirmOrder = async () => {
+    try {
+      const sessionData = await getSession();
+      const userEmail = sessionData.rows.item(0).email;
+
+      triggerPostOrder({
+        items: CartData,
+        user: userEmail,
+        total,
+      });
+    } catch (error) {
+      console.error("Error al obtener la sesión del usuario:", error);
+    }
   };
 
   const totalToShow = CartData.length > 0 ? total : 0;

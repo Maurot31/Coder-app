@@ -4,12 +4,21 @@ import OrderItem from "../components/OrderItem";
 import { useGetOrdersByUserQuery } from "../services/shopServices";
 
 const Order = () => {
-  const { data: OrderData, isLoading } = useGetOrdersByUserQuery(
-    "maurotoledopc@gmail.com"
-  );
-  //if(!isLoading){
-  console.log(OrderData);
-  //}
+  const { data: OrderData, isLoading } = useGetOrdersByUserQuery();
+
+  const fetchOrdersByUser = async () => {
+    try {
+      const sessionData = await getSession();
+      const userEmail = sessionData.rows.item(0).email;
+      useGetOrdersByUserQuery({ user: userEmail });
+    } catch (error) {
+      console.error("Error al obtener la sesión del usuario:", error);
+    }
+  };
+
+  React.useEffect(() => {
+    fetchOrdersByUser();
+  }, []);
 
   return (
     <View>

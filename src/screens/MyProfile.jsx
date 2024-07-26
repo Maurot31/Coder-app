@@ -5,6 +5,8 @@ import CustomButton from "../components/CustomButton";
 import { useDispatch, useSelector } from "react-redux";
 import { useGetProfileimageQuery } from "../services/shopServices";
 import { clearUser } from "../fetures/user/UserSlice";
+import { truncateSessionTable } from "../persistence";
+import { Platform } from "react-native";
 
 const MyProfile = ({ navigation }) => {
   const dispatch = useDispatch();
@@ -21,9 +23,13 @@ const MyProfile = ({ navigation }) => {
   };
 
   const signOut = async () => {
-    dispatch(clearUser());
+    try {
+      if (Platform.OS !== "web") await truncateSessionTable();
+      dispatch(clearUser());
+    } catch (error) {
+      console.log({ errorSignOutDB: error });
+    }
   };
-
   const defaultImageRoute = "../../assets/user.png";
 
   return (
